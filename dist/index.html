@@ -18,6 +18,30 @@
 		canvas {
 			display: block;
 		}
+        .play{
+            font-size:10;
+            text-align:center;
+            width:147px;
+            opacity:.5;
+            text-decoration:none;
+            padding: 4px;
+            border:2px solid #1a1a1a;
+            border-radius:5px;
+            cursor:pointer;
+            color:#fff;
+            height: 25px;
+            line-height:25px;
+            background: #292929;
+            position: fixed;
+            bottom:16px;
+            left: 16px;
+            z-index: 1000;
+            transition:1s all;
+        }
+        .play:hover{
+            opacity: 1;
+            border:2px solid #f60;
+        }
 	</style>
 </head>
 
@@ -25,10 +49,10 @@
 <script src="/dist/helper.js"></script>
 <script src="/dist/game.js"></script>
 
-  
 <!--
 This script places a badge on your repl's full-browser view back to your repl's cover page. Try various colors for the theme: dark, light, red, orange, yellow, lime, green, teal, blue, blurple, magenta, pink!
 -->
+<a href="https://replit.com/@GoodVessel92551/Booogle-Two?v=1" class="play">Play On Booogle</a>
 <script src="https://replit.com/public/js/replit-badge.js" theme="blue" defer></script> 
 </body>
 
