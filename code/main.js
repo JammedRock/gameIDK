@@ -1,5 +1,5 @@
 import kaboom from "kaboom"
-
+var score
 kaboom({
   background: [52, 174, 235]
 })
@@ -22,7 +22,10 @@ loadSprite("sign6", "sprites/sign7.png");
 loadSprite("sign7", "sprites/sign8.png");
 loadSprite("sign8", "sprites/sign9.png");
 loadSprite("sign9", "sprites/sign10.png");
+loadSprite("sign10", "sprites/sign11.png");
+loadSprite("box", "sprites/box.png");
 loadSound("end", "sounds/end.mp3");
+loadSound("get_box", "sounds/get_box.wav");
 loadSprite("lava", "sprites/lava.png");
 loadSprite("end", "sprites/end2.png",{
     	sliceX: 4,
@@ -35,6 +38,7 @@ loadSprite("end", "sprites/end2.png",{
 		},
 	},
 })
+loadSprite("coin", "sprites/coin.png")
 loadSprite("bean", "sprites/bean4.png",{
     	sliceX:15,
 	anims: {
@@ -52,7 +56,9 @@ loadSprite("bean", "sprites/bean4.png",{
         },
 	},
 })
-const SPEED = 320
+var SPEED = 320
+var JUMP = 820
+var GRAVITY = 1600
 const FALL_DEATH = 2400
 level = 0
 
@@ -68,24 +74,34 @@ const LEVELS = [
         "                           ",
         "                           ",
         "o                          ",
-        "      m   b    |   !       ",
-        "     ===  ==   =--==       ",
+        "      m   bc   |   !       ",
+        "    c===  ==   =--==       ",
         "   ==xx         xxx        ",
         "                           ",
-        "|  i|m     m b|   m  | m  b m        b|mm   m  ",
+        "|  i|m  ?  m b|   m ?| m  b m        b|mm  ?m c",
         "======--========================---=============",
-        "xxxx xxxx      xxx             xxxx   xxx     x"
+        "xxxx xxxx      xxx             xxxxx  xxx     x"
     
     ],
     [
+        "!",
+        "=   m        b|  b",
+        "x====---=  ? ==-== cmb",
+        " oxxxxxxx====xxxxx====",
+        "                      ",
+        " m  c|  b  m    m   ?  m",
+        "==  ==  == =  ===  ==  =",
+        "",
+    ],
+    [
         " o                     m    |" ,
-        "                       =    =     b",
+        "                   c   =    =     b c",
         "                   =              =-=",
-        "        |     m  b x               x         ",
+        "        |     m  b x              xxx        ",
         "        =     =  =         ",
         "   |m   x                  ",
         "   ==                      ",
-        "  i  mm      bm    |m     mm   m      m  bmm  !",
+        "  i cmm      bm   ?|m     mm  cm      m ?bmm c!",
         "=========   ===--=====   ========     =========",
         "xxxx  xx       xxx        x    xx     xxx     x"
     ],
@@ -93,11 +109,11 @@ const LEVELS = [
         "o                          ",
         "                     m     ",
         "                     =    !",
-        "            m     |  x   b=",
+        "        c   m     |  x   b=",
         "        =   =     =      =x",
-        "    |       x              ",
+        "    |?      x              ",
         "    ==                      ",
-        " i   x   m    m b      |mm  ",
+        " i   x   m    m b     ?|mm c",
         "==--=x====   =====    ======",
         "xxxx  xx       xxx    xxx   "
     ],
@@ -109,20 +125,20 @@ const LEVELS = [
         "                          =",
         "                 m    |    ",
         "                 =    =    ",
-        " i     |b    = =  m  |mmm  ",
+        "ci     |b    = =  m ?|mmm c",
         "==     ===  =x=x--=========",
-        "xx             xxx     xxx "
+        "xx             xxxx    xxx "
     ],
     [
-        "                  m  |mb      m    m      o ",
+        "                 ?m c|mb      m    m      o ",
         "                =========-----==   =        ",
         "                x     xx xxxxxxx     b      ",
-        "                      x     xxxx  m  =   i  ",
+        "                      x     xxxx  m  =   ic?",
         "                              xx--===x=--===--=",
         "                                xxx    xxx  xxx",
         "                                          m!",
         "                                          ==",
-        "                       m     b     | m  =-xx",
+        "                c      m     b    ?| m  =-xx",
         "                =    ====    ==   ======xxxxx"
     ],
     [
@@ -133,45 +149,45 @@ const LEVELS = [
         "                           ",
         "                           ",
         " o                         ",
-        "m|i   b   m m       b    ||  mm b m|      m     m    |bm     m    b         m   | b    b    ! b m",
+        "m|i   b   m m       b    ||  mm b m|    ? m c   m    |bm     m    b         m   | b    b  ? ! b ?",
         "===   =   = =  = =  =  = ==  == = ===   = = === = = ==== = === =  = = ===   =-=== = = === = = = =",
         " xx       x    x         xx       xx      x  xx   x   xx x     x      x x    xxx       xx   x   x",
     ],
     [
-        "  o     ! mm b ",
-        "      =========",
+        "  o  ?c ! mm b ",
+        "     ==========?",
         "        xxxxxxx===",
         "                    m|",
-        "             bm   b===",
+        "            cbm   b===",
         "mmi|   bb m====--==xxx",
         "====---====xxxxxx",
         "x  xxxxx xx  xx",
     ],
     [
         "                                                   m    b  | |  mm",
-        "  o                              m    b           ==    = == == ===      m!",
-        "                   b|        =   =    =  =    =   xx    x xx xx xxx     ===",
-        "         m|     b ====---=   x   x    x  x    x",
+        "  o                              m    b       c   ==    = == == ===      m!   ?",
+        "                   b|    ?   =   =    =  =    =   xx    x xx xx xxx     ===   =",
+        "       c m|     b ====---=   x   x    x  x    x",
         "  mi  =====-=--===xxxxxxxx",
         "======xxx xxxxxx",
     ],
     [
-        "   o        | m m m b|",
+        "   o        |?m m mcb|",
         "           =============  |mm",
         "     =             xxxxx=====",
-        "=                        |bbm",
-        "  mim |           !  m ======",
+        "=                      c |bbm",
+        "  mim |          ?!  m ======",
         "========---------======xxxx",
         "xxxxx  xxxxxxxxxxx   x",
     ],
     [
-        " || oimb ",
+        " ||coimb ",
         "=========",
         "xx   xx x",
     ],
     ]
     scene("game", ({ levelIdx }) => {
-        gravity(1600)
+        gravity(GRAVITY)
         addLevel(LEVELS[levelIdx || 0],{
         width:64,
         height:64,
@@ -223,6 +239,16 @@ const LEVELS = [
             sprite("sign"+level),
             area(),
         ],
+        "c": () => [
+            sprite("coin"),
+            area(),
+            "coin",
+        ],
+        "?": () => [
+            sprite("box"),
+            area(),
+            "box"
+        ]
 })
 const bean = get("bean")[0]
 if (level != LEVELS.length - 1){
@@ -249,7 +275,7 @@ onKeyDown(["right","d"], () => {
 
 onKeyDown(["up","w"], () => {
 	if(bean.isGrounded()){
-        bean.jump(820)
+        bean.jump(JUMP)
     }
 })
 bean.onCollide("end", () => {
@@ -262,10 +288,31 @@ bean.onCollide("end", () => {
     }else{
     }
 })
+bean.onCollide("coin", (coin) => {
+    score++
+    destroy(coin)
+    textit.text = "Score: "+score
+})
+bean.onCollide("box", (box) => {
+    destroy(box)
+    play("get_box")
+    number = Math.floor(Math.random() * (5) + 1)
+    if (number == "1"){
+        SPEED = 400
+    }
+    else if (number == "2"){
+        SPEED = 280
+    }
+    else if (number == "3"){
+        JUMP = 1000
+    }
+    else{
+        SPEED = 700
+    }
+})
+               
 bean.onCollide("kill", () => {
-    wait(0.5, () => {
-        die()
-    })
+    die()
 })
     
 bean.onUpdate(() => {
@@ -275,15 +322,28 @@ bean.onUpdate(() => {
     }
 })
 
+
+const textit = add([
+    fixed(),
+	text("Score: "+score),
+	pos(20, 20),
+    scale(0.7)
+	])
 })
 
 function die(){
+    score /= 2
+    score = Math.floor(score)
+    GRAVITY = 1600
+    JUMP = 820
+    SPEED = 320
     go("game",{
         levelIdx:level,
     })
 }
 
 function start(){
+    score = 0
     go("game",{
         levelIdx:0,
     })
