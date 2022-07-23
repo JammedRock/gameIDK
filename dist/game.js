@@ -2937,6 +2937,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSprite("sign10", "sprites/sign11.png");
   loadSprite("box", "sprites/box.png");
   loadSound("end", "sounds/end.mp3");
+  loadSound("bounce", "sounds/bounce.wav");
   loadSound("get_box", "sounds/get_box.wav");
   loadSprite("lava", "sprites/lava.png");
   loadSprite("end", "sprites/end2.png", {
@@ -3063,7 +3064,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     [
       "  o  ?c ! mm b ",
       "     ==========?",
-      "        xxxxxxx===",
+      "     xxxxxxxxxx===",
       "                    m|",
       "            cbm   b===",
       "mmi|   bb m====--==xxx",
@@ -3169,12 +3170,20 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       });
     });
     onKeyDown(["left", "a"], () => {
-      bean.move(-SPEED, 0);
+      if (isKeyDown("a") && isKeyDown("left") == false) {
+        bean.move(-SPEED, 0);
+      } else if (isKeyDown("left") && isKeyDown("a") == false) {
+        bean.move(-SPEED, 0);
+      }
     });
     onKeyDown(["right", "d"], () => {
-      bean.move(SPEED, 0);
+      if (isKeyDown("d") && isKeyDown("right") == false) {
+        bean.move(SPEED, 0);
+      } else if (isKeyDown("right") && isKeyDown("d") == false) {
+        bean.move(SPEED, 0);
+      }
     });
-    onKeyDown(["up", "w"], () => {
+    onKeyDown(["up", "w", "space"], () => {
       if (bean.isGrounded()) {
         bean.jump(JUMP);
       }
@@ -3197,7 +3206,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     bean.onCollide("box", (box) => {
       destroy(box);
       play("get_box");
-      number = Math.floor(Math.random() * 5 + 1);
+      number = randi(4);
       if (number == "1") {
         SPEED = 400;
       } else if (number == "2") {

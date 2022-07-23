@@ -25,6 +25,7 @@ loadSprite("sign9", "sprites/sign10.png");
 loadSprite("sign10", "sprites/sign11.png");
 loadSprite("box", "sprites/box.png");
 loadSound("end", "sounds/end.mp3");
+loadSound("bounce", "sounds/bounce.wav");
 loadSound("get_box", "sounds/get_box.wav");
 loadSprite("lava", "sprites/lava.png");
 loadSprite("end", "sprites/end2.png",{
@@ -156,7 +157,7 @@ const LEVELS = [
     [
         "  o  ?c ! mm b ",
         "     ==========?",
-        "        xxxxxxx===",
+        "     xxxxxxxxxx===",
         "                    m|",
         "            cbm   b===",
         "mmi|   bb m====--==xxx",
@@ -266,16 +267,27 @@ bean.onGround(() => {
 
 
 onKeyDown(["left","a"], () => {
-	bean.move(-SPEED, 0)
+    if(isKeyDown("a") && isKeyDown("left") == false){
+        bean.move(-SPEED, 0)
+    }
+    else if(isKeyDown("left") && isKeyDown("a") == false){
+        bean.move(-SPEED, 0)
+    }
 })
 
 onKeyDown(["right","d"], () => {
-	bean.move(SPEED, 0)
+    if(isKeyDown("d") && isKeyDown("right") == false){
+        bean.move(SPEED, 0)
+    }
+    else if(isKeyDown("right") && isKeyDown("d") == false){
+        bean.move(SPEED, 0)
+    }
 })
 
-onKeyDown(["up","w"], () => {
+onKeyDown(["up","w","space"], () => {
 	if(bean.isGrounded()){
         bean.jump(JUMP)
+        //play("bounce")
     }
 })
 bean.onCollide("end", () => {
@@ -296,7 +308,7 @@ bean.onCollide("coin", (coin) => {
 bean.onCollide("box", (box) => {
     destroy(box)
     play("get_box")
-    number = Math.floor(Math.random() * (5) + 1)
+    number = randi(4)
     if (number == "1"){
         SPEED = 400
     }
