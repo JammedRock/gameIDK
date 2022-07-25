@@ -1,7 +1,7 @@
 import kaboom from "kaboom"
 var score
 kaboom({
-  background: [52, 174, 235]
+    background: [52, 174, 235]
 })
 
 
@@ -23,42 +23,44 @@ loadSprite("sign7", "sprites/sign8.png");
 loadSprite("sign8", "sprites/sign9.png");
 loadSprite("sign9", "sprites/sign10.png");
 loadSprite("sign10", "sprites/sign11.png");
+loadSprite("spikes", "sprites/spikes.png");
 loadSprite("box", "sprites/box.png");
 loadSound("end", "sounds/end.mp3");
 loadSound("bounce", "sounds/bounce.wav");
 loadSound("get_box", "sounds/get_box.wav");
+loadSprite("platform", "sprites/platform.png");
 loadSprite("lava", "sprites/lava.png");
-loadSprite("end", "sprites/end2.png",{
-    	sliceX: 4,
-	anims: {
-		"idle": {
-			from: 0,
-			to: 3,
-			speed: 5,
-			loop: true,
-		},
-	},
+loadSprite("end", "sprites/end2.png", {
+    sliceX: 4,
+    anims: {
+        "idle": {
+            from: 0,
+            to: 3,
+            speed: 5,
+            loop: true,
+        },
+    },
 })
 loadSprite("coin", "sprites/coin.png")
-loadSprite("bean", "sprites/bean4.png",{
-    	sliceX:15,
-	anims: {
-		"idle": {
-			from: 0,
-			to: 10,
-			speed: 10,
-			loop: true,
-		},
-        "jump":{
-          from:12,
-            to:14,
-            speed:50,
-            loop:false,
+loadSprite("bean", "sprites/bean4.png", {
+    sliceX: 15,
+    anims: {
+        "idle": {
+            from: 0,
+            to: 10,
+            speed: 10,
+            loop: true,
         },
-	},
+        "jump": {
+            from: 12,
+            to: 14,
+            speed: 50,
+            loop: false,
+        },
+    },
 })
 var SPEED = 320
-var JUMP = 820
+var JUMP = 800
 var GRAVITY = 1600
 const FALL_DEATH = 2400
 level = 0
@@ -66,43 +68,43 @@ level = 0
 layers([
     "game",
     "ui",
-],"game")
+], "game")
 
 
 const LEVELS = [
     [
-    
+
         "                           ",
         "                           ",
         "o                          ",
-        "      m   bc   |   !       ",
-        "    c===  ==   =--==       ",
+        "      ms  pp   |   !       ",
+        "    c===       =--==       ",
         "   ==xx         xxx        ",
         "                           ",
-        "|  i|m  ?  m b|   m ?| m  b m        b|mm  ?m c",
+        "|  i|m  ? sm b|   m ?| m  b m        b|mm p?msc",
         "======--========================---=============",
         "xxxx xxxx      xxx             xxxxx  xxx     x"
-    
+
     ],
     [
         "!",
-        "=   m        b|  b",
-        "x====---=  ? ==-== cmb",
+        "==s m        b|  b",
+        "xx===---=  ? ==-== cmb",
         " oxxxxxxx====xxxxx====",
         "                      ",
-        " m  c|  b  m    m   ?  m",
-        "==  ==  == =  ===  ==  =",
+        "im  c|  b  p    m   ?  m",
+        "==  ==  ==    ===  ==  =",
         "",
     ],
     [
-        " o                     m    |" ,
-        "                   c   =    =     b c",
+        " o                     p    |",
+        "                   c        =     b c",
         "                   =              =-=",
-        "        |     m  b x              xxx        ",
-        "        =     =  =         ",
+        "        |     p  b x              xxx        ",
+        "        =        =         ",
         "   |m   x                  ",
-        "   ==                      ",
-        "  i cmm      bm   ?|m     mm  cm      m ?bmm c!",
+        "   ==                                         ",
+        "  i cmm      bm  s?|m     mm  cm      m ?bmm c!",
         "=========   ===--=====   ========     =========",
         "xxxx  xx       xxx        x    xx     xxx     x"
     ],
@@ -110,11 +112,11 @@ const LEVELS = [
         "o                          ",
         "                     m     ",
         "                     =    !",
-        "        c   m     |  x   b=",
-        "        =   =     =      =x",
+        "            m     |  x   b=",
+        "        p   =     =      =x",
         "    |?      x              ",
         "    ==                      ",
-        " i   x   m    m b     ?|mm c",
+        " i   x   m    m bs    ?|mm c",
         "==--=x====   =====    ======",
         "xxxx  xx       xxx    xxx   "
     ],
@@ -124,22 +126,22 @@ const LEVELS = [
         "                           ",
         "o                         !",
         "                          =",
-        "                 m    |    ",
-        "                 =    =    ",
-        "ci     |b    = =  m ?|mmm c",
+        "                 p    |    ",
+        "                      =    ",
+        "ci     |bs   = =  m ?|mmm c",
         "==     ===  =x=x--=========",
         "xx             xxxx    xxx "
     ],
     [
-        "                 ?m c|mb      m    m      o ",
-        "                =========-----==   =        ",
+        "                 ?msc|mb      m           o ",
+        "                =========-----==   p        ",
         "                x     xx xxxxxxx     b      ",
-        "                      x     xxxx  m  =   ic?",
+        "                      x     xxxx  m  =s  ic?",
         "                              xx--===x=--===--=",
         "                                xxx    xxx  xxx",
         "                                          m!",
         "                                          ==",
-        "                c      m     b    ?| m  =-xx",
+        "                c     sm     b    ?| m  =-xx",
         "                =    ====    ==   ======xxxxx"
     ],
     [
@@ -150,9 +152,9 @@ const LEVELS = [
         "                           ",
         "                           ",
         " o                         ",
-        "m|i   b   m m       b    ||  mm b m|    ? m c   m    |bm     m    b         m   | b    b  ? ! b ?",
-        "===   =   = =  = =  =  = ==  == = ===   = = === = = ==== = === =  = = ===   =-=== = = === = = = =",
-        " xx       x    x         xx       xx      x  xx   x   xx x     x      x x    xxx       xx   x   x",
+        "m|i   b   m m  s p  b    ||  mm b m|    ? m cs  m p  |bm    sm    b         m  s| b    b  ? ! b ?",
+        "===   =   = =  =    =  = ==  == = ===   = = === =   ==== = === =  = = ===   =-=== = = === = = = =",
+        " xx       x    x         xx       xx      x  xx       xx x     x      x x    xxx       xx   x   x",
     ],
     [
         "  o  ?c ! mm b ",
@@ -165,19 +167,19 @@ const LEVELS = [
         "x  xxxxx xx  xx",
     ],
     [
-        "                                                   m    b  | |  mm",
-        "  o                              m    b       c   ==    = == == ===      m!   ?",
-        "                   b|    ?   =   =    =  =    =   xx    x xx xx xxx     ===   =",
-        "       c m|     b ====---=   x   x    x  x    x",
+        "                                                   m    b  | |s mm",
+        "  o                              m    b  p    c   ==    = == == ===      m!   ?",
+        "                   b|s   ?   =   =    =       =   xx    x xx xx xxx     ===   =",
+        "       c m|     b ====---=   x   x    x       x",
         "  mi  =====-=--===xxxxxxxx",
         "======xxx xxxxxx",
     ],
     [
-        "   o        |?m m mcb|",
-        "           =============  |mm",
-        "     =             xxxxx=====",
+        "   o        |?msm mcb|",
+        "     p     =============  |==",
+        "                   xxxxx===x ",
         "=                      c |bbm",
-        "  mim |          ?!  m ======",
+        "  mim |          ?! sm ======",
         "========---------======xxxx",
         "xxxxx  xxxxxxxxxxx   x",
     ],
@@ -186,24 +188,32 @@ const LEVELS = [
         "=========",
         "xx   xx x",
     ],
-    ]
-    scene("game", ({ levelIdx }) => {
-        gravity(GRAVITY)
-        addLevel(LEVELS[levelIdx || 0],{
-        width:64,
-        height:64,
+]
+scene("game", ({ levelIdx }) => {
+    gravity(GRAVITY)
+    addLevel(LEVELS[levelIdx || 0], {
+        width: 64,
+        height: 64,
         "=": () => [
             sprite("grass"),
             area(),
             solid(),
+            origin("botleft"),
+        ],
+        "p": ()=> [
+            sprite("platform"),
+            area({width:64, height:13}),
+            solid(),
+            origin("botleft"),
+            "unstable"
         ],
         "o": () => [
             scale(0.9),
             sprite("bean"),
-            area(),
+            area({height:64, width:64}),
             solid(),
             body(),
-            origin("bot"),
+            origin("botleft"),
             "bean",
 
         ],
@@ -211,153 +221,172 @@ const LEVELS = [
             sprite("dirt"),
             area(),
             solid(),
+            origin("botleft"),
         ],
         "!": () => [
             sprite("end"),
             area(),
+            origin("botleft"),
             "end",
         ],
         "m": () => [
             sprite("grass2"),
             area(),
+            origin("botleft"),
         ],
         "-": () => [
             sprite("lava"),
-            area(),
+            area({ height: 55 }),
+            origin("botleft"),
             "kill",
             "lava",
+        ],
+        "s": () => [
+            sprite("spikes"),
+            area({ widther: 50, height: 5 }),
+            origin("botleft"),
+            "kill",
         ],
         "|": () => [
             sprite("flower"),
             area(),
+            origin("botleft"),
             layer("ui")
         ],
         "b": () => [
             sprite("bush"),
             area(),
+            origin("botleft"),
         ],
         "i": () => [
-            sprite("sign"+level),
+            sprite("sign" + level),
             area(),
+            origin("botleft"),
         ],
         "c": () => [
             sprite("coin"),
             area(),
+            origin("botleft"),
             "coin",
         ],
         "?": () => [
             sprite("box"),
             area(),
+            origin("botleft"),
             "box"
         ]
-})
-const bean = get("bean")[0]
-if (level != LEVELS.length - 1){
-    const end = get("end")[0]
-    end.play("idle")
-    bean.play("idle")
-}
-
-bean.onGround(() => {
-    bean.play("jump")
-    wait(0.5, ()=> {
-        bean.play("idle")
     })
-})
+    const bean = get("bean")[0]
+    if (level != LEVELS.length - 1) {
+        const end = get("end")[0]
+        end.play("idle")
+        bean.play("idle")
+    }
 
-
-onKeyDown(["left","a"], () => {
-    if(isKeyDown("a") && isKeyDown("left") == false){
-        bean.move(-SPEED, 0)
-    }
-    else if(isKeyDown("left") && isKeyDown("a") == false){
-        bean.move(-SPEED, 0)
-    }
-})
-
-onKeyDown(["right","d"], () => {
-    if(isKeyDown("d") && isKeyDown("right") == false){
-        bean.move(SPEED, 0)
-    }
-    else if(isKeyDown("right") && isKeyDown("d") == false){
-        bean.move(SPEED, 0)
-    }
-})
-
-onKeyDown(["up","w","space"], () => {
-	if(bean.isGrounded()){
-        bean.jump(JUMP)
-        //play("bounce")
-    }
-})
-bean.onCollide("end", () => {
-    play("end")
-    if (levelIdx < LEVELS.length - 1){
-        level += 1
-        go("game",{
-            levelIdx: levelIdx + 1
+    bean.onGround(() => {
+        bean.play("jump")
+        wait(0.5, () => {
+            bean.play("idle")
         })
-    }else{
-    }
-})
-bean.onCollide("coin", (coin) => {
-    score++
-    destroy(coin)
-    textit.text = "Score: "+score
-})
-bean.onCollide("box", (box) => {
-    destroy(box)
-    play("get_box")
-    number = randi(4)
-    if (number == "1"){
-        SPEED = 400
-    }
-    else if (number == "2"){
-        SPEED = 280
-    }
-    else if (number == "3"){
-        JUMP = 1000
-    }
-    else{
-        SPEED = 700
-    }
-})
-               
-bean.onCollide("kill", () => {
-    die()
-})
-    
-bean.onUpdate(() => {
-    camPos(bean.pos)
-    if (bean.pos.y >= FALL_DEATH){
+    })
+
+
+    onKeyDown(["left", "a"], () => {
+        if (isKeyDown("a") && isKeyDown("left") == false) {
+            bean.move(-SPEED, 0)
+        }
+        else if (isKeyDown("left") && isKeyDown("a") == false) {
+            bean.move(-SPEED, 0)
+        }
+    })
+
+    onKeyDown(["right", "d"], () => {
+        if (isKeyDown("d") && isKeyDown("right") == false) {
+            bean.move(SPEED, 0)
+        }
+        else if (isKeyDown("right") && isKeyDown("d") == false) {
+            bean.move(SPEED, 0)
+        }
+    })
+    onKeyDown(["up", "w", "space"], () => {
+        if (bean.isGrounded()) {
+            bean.jump(JUMP)
+            //play("bounce")
+        }
+    })
+    bean.onCollide("end", () => {
+        play("end")
+        if (levelIdx < LEVELS.length - 1) {
+            level += 1
+            go("game", {
+                levelIdx: levelIdx + 1
+            })
+        } else {
+        }
+    })
+    bean.onCollide("coin", (coin) => {
+        score++
+        destroy(coin)
+        textit.text = "Score: " + score
+    })
+    bean.onCollide("unstable", (unstable) => {
+        wait(1,() => {
+            destroy(unstable)
+        })
+    })
+    bean.onCollide("box", (box) => {
+        destroy(box)
+        play("get_box")
+        number = randi(4)
+        if (number == "1") {
+            SPEED = 400
+        }
+        else if (number == "2") {
+            SPEED = 280
+        }
+        else if (number == "3") {
+            JUMP = 1000
+        }
+        else {
+            SPEED = 700
+        }
+    })
+
+    bean.onCollide("kill", () => {
         die()
-    }
+    })
+
+    bean.onUpdate(() => {
+        camPos(bean.pos)
+        if (bean.pos.y >= FALL_DEATH) {
+            die()
+        }
+    })
+
+    //debug.inspect = true
+    const textit = add([
+        fixed(),
+        text("Score: " + score),
+        pos(20, 20),
+        scale(0.7)
+    ])
 })
 
-
-const textit = add([
-    fixed(),
-	text("Score: "+score),
-	pos(20, 20),
-    scale(0.7)
-	])
-})
-
-function die(){
+function die() {
     score /= 2
     score = Math.floor(score)
     GRAVITY = 1600
     JUMP = 820
     SPEED = 320
-    go("game",{
-        levelIdx:level,
+    go("game", {
+        levelIdx: level,
     })
 }
 
-function start(){
+function start() {
     score = 0
-    go("game",{
-        levelIdx:0,
+    go("game", {
+        levelIdx: 0,
     })
 }
 
