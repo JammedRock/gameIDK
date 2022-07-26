@@ -23,7 +23,10 @@ loadSprite("sign7", "sprites/sign8.png");
 loadSprite("sign8", "sprites/sign9.png");
 loadSprite("sign9", "sprites/sign10.png");
 loadSprite("sign10", "sprites/sign11.png");
+loadSprite("sign11", "sprites/sign12.png");
+loadSprite("sign12", "sprites/sign13.png");
 loadSprite("spikes", "sprites/spikes.png");
+loadSprite("sign13", "sprites/sign14.png");
 loadSprite("box", "sprites/box.png");
 loadSound("end", "sounds/end.mp3");
 loadSound("bounce", "sounds/bounce.wav");
@@ -37,6 +40,17 @@ loadSprite("end", "sprites/end2.png", {
             from: 0,
             to: 3,
             speed: 5,
+            loop: true,
+        },
+    },
+})
+loadSprite("platform2", "sprites/platform2.png", {
+    sliceX: 4,
+    anims: {
+        "idle": {
+            from: 0,
+            to: 3,
+            speed: 3,
             loop: true,
         },
     },
@@ -93,7 +107,7 @@ const LEVELS = [
         " oxxxxxxx====xxxxx====",
         "                      ",
         "im  c|  b  p    m   ?  m",
-        "==  ==  ==    ===  ==  =",
+        "==  ==  ==    ===  == ==",
         "",
     ],
     [
@@ -175,13 +189,35 @@ const LEVELS = [
         "======xxx xxxxxx",
     ],
     [
-        "   o        |?msm mcb|",
+        "   o        |?msm mcb|     s",
         "     p     =============  |==",
         "                   xxxxx===x ",
         "=                      c |bbm",
-        "  mim |          ?! sm ======",
+        "  mim |          ?!  m ======",
         "========---------======xxxx",
         "xxxxx  xxxxxxxxxxx   x",
+    ],
+    [
+        "oi  m|b ",
+        "========    p",
+        "xxxxxxxx",
+        " xxxxx  ",
+        "  xxxxc ",
+        "  xxxx=b",
+        "   xxxx=== b  ?|| m",
+        "      xxxx==--====== cm !",
+        "          x xxxx  xx ===="
+    ],
+    [
+        "oi     m",
+        "===    =   c                                                  s!",
+        "x          =    =    ?    m       c  m   p    p   p   p   p  ===",
+        "           x         =    =   =   =  =                        xx",
+    ],
+    [
+        "                                                      io",
+        "  !    p  c    ?n p    p   p   cs   |    b m     pp   ===",
+        "===       ==   ==              ==   =    ===  =     ==xx"
     ],
     [
         " ||coimb ",
@@ -202,7 +238,7 @@ scene("game", ({ levelIdx }) => {
         ],
         "p": ()=> [
             sprite("platform"),
-            area({width:64, height:13}),
+            area({width:64, height:20}),
             solid(),
             origin("botleft"),
             "unstable"
@@ -243,7 +279,7 @@ scene("game", ({ levelIdx }) => {
         ],
         "s": () => [
             sprite("spikes"),
-            area({ widther: 50, height: 5 }),
+            area({ widther: 50, height: 10 }),
             origin("botleft"),
             "kill",
         ],
