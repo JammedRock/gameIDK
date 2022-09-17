@@ -2915,7 +2915,9 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   // code/main.js
   var score;
   no({
-    background: [52, 174, 235]
+    background: [52, 174, 235],
+    canvas: document.querySelector("#kaboom"),
+    font: "sinko"
   });
   loadSprite("grass", "sprites/grass.png");
   loadSprite("dirt", "sprites/dirt.png");
@@ -2943,15 +2945,35 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   loadSound("end", "sounds/end.mp3");
   loadSound("bounce", "sounds/bounce.wav");
   loadSound("get_box", "sounds/get_box.wav");
-  loadSprite("platform", "sprites/platform.png");
-  loadSprite("lava", "sprites/lava.png");
-  loadSprite("end", "sprites/end2.png", {
+  loadSprite("platform", "sprites/platform2.png", {
     sliceX: 4,
     anims: {
       "idle": {
         from: 0,
         to: 3,
         speed: 5,
+        loop: true
+      }
+    }
+  });
+  loadSprite("lava", "sprites/lava3.png", {
+    sliceX: 4,
+    anims: {
+      "idle": {
+        from: 0,
+        to: 3,
+        speed: 2,
+        loop: true
+      }
+    }
+  });
+  loadSprite("end", "sprites/end3.png", {
+    sliceX: 6,
+    anims: {
+      "idle": {
+        from: 0,
+        to: 5,
+        speed: 10,
         loop: true
       }
     }
@@ -3003,7 +3025,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       "    c===       =--==       ",
       "   ==xx         xxx        ",
       "                           ",
-      "|  i|m  ? sm b|   m ?| m  b m        b|mm p?msc",
+      "|  i|m  ? sm b|   m ?| m  b m        b|mm ",
       "======--========================---=============",
       "xxxx xxxx      xxx             xxxxx  xxx     x"
     ],
@@ -3141,14 +3163,16 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         sprite("grass"),
         area(),
         solid(),
-        origin("botleft")
+        origin("botleft"),
+        outview({ hide: true })
       ],
       "p": () => [
         sprite("platform"),
         area({ width: 64, height: 20 }),
         solid(),
         origin("botleft"),
-        "unstable"
+        "unstable",
+        outview({ hide: true })
       ],
       "o": () => [
         scale(0.9),
@@ -3163,62 +3187,77 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         sprite("dirt"),
         area(),
         solid(),
-        origin("botleft")
+        origin("botleft"),
+        outview({ hide: true })
       ],
       "!": () => [
         sprite("end"),
         area(),
         origin("botleft"),
-        "end"
+        "end",
+        outview({ hide: true })
       ],
       "m": () => [
         sprite("grass2"),
         area(),
-        origin("botleft")
+        origin("botleft"),
+        outview({ hide: true })
       ],
       "-": () => [
         sprite("lava"),
         area({ height: 55 }),
         origin("botleft"),
         "kill",
+        outview({ hide: true }),
         "lava"
       ],
       "s": () => [
         sprite("spikes"),
         area({ widther: 50, height: 10 }),
         origin("botleft"),
-        "kill"
+        "kill",
+        outview({ hide: true })
       ],
       "|": () => [
         sprite("flower"),
         area(),
         origin("botleft"),
-        layer("ui")
+        outview({ hide: true })
       ],
       "b": () => [
         sprite("bush"),
         area(),
-        origin("botleft")
+        origin("botleft"),
+        outview({ hide: true })
       ],
       "i": () => [
         sprite("sign" + level),
         area(),
-        origin("botleft")
+        origin("botleft"),
+        outview({ hide: true })
       ],
       "c": () => [
         sprite("coin"),
         area(),
         origin("botleft"),
-        "coin"
+        "coin",
+        outview({ hide: true })
       ],
       "?": () => [
         sprite("box"),
         area(),
         origin("botleft"),
-        "box"
+        "box",
+        outview({ hide: true })
       ]
     });
     const bean = get("bean")[0];
+    every("unstable", (plat) => {
+      plat.play("idle");
+    });
+    every("lava", (lava) => {
+      lava.play("idle");
+    });
     if (level != LEVELS.length - 1) {
       const end = get("end")[0];
       end.play("idle");
@@ -3296,7 +3335,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
       fixed(),
       text("Score: " + score),
       pos(20, 20),
-      scale(0.7)
+      scale(5)
     ]);
   });
   function die() {

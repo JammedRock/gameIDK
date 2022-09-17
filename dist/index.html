@@ -5,6 +5,7 @@
 <head>
 	<title>Parkour</title>
 	<meta charset="utf-8">
+    <link rel = "icon" href = "/sprites/grass.png" type = "image/x-icon">
 	<style>
 		* {
 			margin: 0;
@@ -19,33 +20,35 @@
 			display: block;
 		}
         .play{
-            font-size:10;
+            font-size:14px;
+			font-weight:600;
             text-align:center;
-            width:147px;
+            width:140px;
             opacity:.5;
             text-decoration:none;
             padding: 4px;
-            border:2px solid #1a1a1a;
             border-radius:5px;
             cursor:pointer;
             color:#fff;
-            height: 25px;
-            line-height:25px;
+            height: 24px;
+            line-height:24px;
             background: #292929;
             position: fixed;
-            bottom:16px;
-            left: 16px;
+            bottom:20px;
+            left: 20px;
             z-index: 1000;
-            transition:1s all;
+            transition:.2s;
         }
         .play:hover{
-            opacity: 1;
-            border:2px solid #f60;
+            opacity: 1.03;
+			scale:1.1;
+			color:#f60;
         }
 	</style>
 </head>
 
 <body>
+	<canvas id="kaboom" ></canvas>
 <script src="/dist/helper.js"></script>
 <script src="/dist/game.js"></script>
 
@@ -54,6 +57,7 @@ This script places a badge on your repl's full-browser view back to your repl's 
 -->
 <a href="https://replit.com/@GoodVessel92551/Booogle-Two?v=1" class="play">Play On Booogle</a>
 <script src="https://replit.com/public/js/replit-badge.js" theme="blue" defer></script> 
+<script>document.getElementById('kaboom').focus()</script>
 </body>
 
 </html>
