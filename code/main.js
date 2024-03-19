@@ -29,16 +29,17 @@ loadSprite("sign11", "sprites/sign12.png");
 loadSprite("sign12", "sprites/sign13.png");
 loadSprite("spikes", "sprites/spikes.png");
 loadSprite("sign13", "sprites/sign14.png");
+loadSprite("sign14", "sprites/sign15.png");
 loadSprite("box", "sprites/box.png");
 loadSound("end", "sounds/end.mp3");
 loadSound("bounce", "sounds/bounce.wav");
-loadSound("get_box", "sounds/get_box.wav");
+loadSound("get_box", "sounds/get_box.mp3");
 loadSprite("platform", "sprites/platform2.png", {
-    sliceX: 4,
+    sliceX: 3,
     anims: {
         "idle": {
             from: 0,
-            to: 3,
+            to: 2,
             speed: 5,
             loop: true,
         },
@@ -242,10 +243,17 @@ const LEVELS = [
         "===       ==   ==              ==   =    ===  =     ==xx"
     ],
     [
+        "                                   !",
+        "o                    m      |     ==",
+        "i    p    c    ?     =-=    ===   xx",
+        "=         =    =    =xxx    xxx   xx",
+        ""
+    ],
+    [
         " ||coimb ",
         "=========",
         "xx   xx x",
-    ],
+    ]
 ]
 scene("game", ({ levelIdx }) => {
     gravity(GRAVITY)
@@ -258,10 +266,11 @@ scene("game", ({ levelIdx }) => {
             solid(),
             origin("botleft"),
 			outview({ hide: true,}),
+            "grass"
         ],
         "p": ()=> [
             sprite("platform"),
-            area({width:64, height:20}),
+            area({width:64, height:18}),
             solid(),
             origin("botleft"),
             "unstable",
@@ -345,7 +354,22 @@ scene("game", ({ levelIdx }) => {
 			outview({ hide: true,}),
         ]
     })
+    const restart = add([
+        fixed(),
+        text("Restart Game"),
+        pos(20, 80),
+        scale(2),
+        area({ width: 100, height: 10 }),
+    ])
+    restart.onClick(() => {
+        setData("Level",0)
+        setData("Score",0)
+        setData("Speed",320)
+        setData("Jump",820)
+        start()
+    })
     const bean = get("bean")[0]
+    bean.play("idle")
 	every("unstable",(plat) => {
 		plat.play("idle")
 	})
@@ -355,7 +379,6 @@ scene("game", ({ levelIdx }) => {
     if (level != LEVELS.length - 1) {
         const end = get("end")[0]
         end.play("idle")
-        bean.play("idle")
     }
 
     bean.onGround(() => {
@@ -393,6 +416,10 @@ scene("game", ({ levelIdx }) => {
         play("end")
         if (levelIdx < LEVELS.length - 1) {
             level += 1
+            setData("Level",level)
+            setData("Score",score)
+            setData("Speed",SPEED)
+            setData("Jump",JUMP)
             go("game", {
                 levelIdx: levelIdx + 1
             })
@@ -453,15 +480,35 @@ function die() {
     GRAVITY = 1600
     JUMP = 820
     SPEED = 320
+    setData("Level",level)
+    setData("Score",score)
+    setData("Speed",SPEED)
+    setData("Jump",JUMP)
     go("game", {
         levelIdx: level,
     })
 }
 
 function start() {
+    level = getData("Level",0)
+    score = getData("Score",0)
+    SPEED = getData("Speed",320)
+    JUMP = getData("Jump",820)
+    if(level == null){
+        level = 0
+    }
+    if(score == null){
+        score == 0
+    }
+    if(SPEED == null){
+        SPEED = 320
+    }
+    if(JUMP == null){
+        JUMP == 820
+    }
     score = 0
     go("game", {
-        levelIdx: 0,
+        levelIdx: level,
     })
 }
 
